@@ -1,0 +1,54 @@
+exploration:
+  global_frame: "/red/slam/map"
+  base_link_frame: "/red/slam/base_link"
+  # Exploration depth of octomap tree. 16 is best resolution, slowest exploration
+  # Save frontiers on that level
+  # experience shows that there is significant increase in search time by 
+  # setting this parameter to < 16)
+  depth: 14
+  # if the candidate point is inside the radius of the previous visited points,
+  # the candidate is deleted from the candidate list
+  radius: 5.5
+  # bounding box: necessary to limit the simulation 
+  # scenario (smaller than actual gazebo scenario)
+  # used for frontier detection
+  bbx_minX: -65.0
+  bbx_maxX: 65.0
+  bbx_minY: -90.0
+  bbx_maxY: 90.0
+  bbx_minZ: 1.0
+  bbx_maxZ: 5.0
+
+  # Length of one side of the cube inside which we calculate information gain
+  box_length: 8.0
+  # Gain to scale exp function in information gain
+  k_gain: 100.0
+  # Constant; small lambda means that motion is cheap and gives priority
+  lambda: 0.1386 
+
+
+  # Total volume of the environment for exploration in m^3
+  volume: 50000
+sensor_model:
+  # Field of view in degrees
+  horizontalFOV: 360
+  verticalFOV: 30
+  # VelodyneVLP16 max range in meters
+  max_range: 10
+  pitch_angle: 10.0
+
+  probability_hit: 0.7
+  probability_miss: 0.4
+  clamping_thres_min: 0.12 
+  clamping_thres_max: 0.97
+  
+octomap:
+  resolution: 0.5
+  octree_depth: 16
+  # Filename and file path for saving octomap
+  filename: "octomap_large.binvox.bt"
+  file_path: "catkin_ws/src/frontier_exploration_3d/data/"
+
+clustering:
+  # A higher bandwidth will result in fewer but larger clusters
+  kernel_bandwidth: 2

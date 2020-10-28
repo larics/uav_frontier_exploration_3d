@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+
+<robot name="mbzirc" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="PI" value="3.14" />
+
+  <link name="world"></link>
+
+    <link name='link_mbzirc_tower'>
+      
+      <inertial>
+        <mass value="500" />
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <inertia
+          ixx="6.71747915" ixy="0.00002148" ixz="-0.00000024"
+          iyx="0.00002148" iyy="6.71747915" iyz="-0.17180670"
+          izx="-0.00000024" izy="0" izz="6.71747915"/>
+      </inertial>
+            
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 -1.57" />
+        <geometry>
+          <mesh filename="package://frontier_exploration_3d/models/tower/meshes/mbzirc_Tower.dae"
+            scale="1 1 1" />
+        </geometry>
+      </visual>
+
+      <collision name='collision'>
+        <origin xyz="0 0 0" rpy="0 0 -1.57"/>
+        <geometry>
+          <mesh filename="package://frontier_exploration_3d/models/tower/meshes/mbzirc_Tower.dae"
+            scale="1 1 1" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="joint_mbzirc_tower" type="fixed">
+        <origin xyz="0 0 1" rpy="0 0 0"/>
+        <parent link="world"/>
+        <child link="link_mbzirc_tower"/>
+    </joint>
+   
+</robot>

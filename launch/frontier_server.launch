@@ -1,0 +1,19 @@
+<launch>
+  <arg name="rate" default="1"/>
+  <arg name="namespace" default="$(env UAV_NAMESPACE)"/>
+  <arg name="slam_ns" default="slam"/>
+  <arg name="odometry" default="odometry"/>
+  <arg name="cloud_in" default="$(arg slam_ns)/submap_cloud"/>
+  <arg name="point_reached" default="exploration/point_reached"/>
+  <arg name="config_filename" default="$(find uav_frontier_exploration_3d)/config/kopterworx_exploration_sim_large_env.yaml"/>
+  
+  <group ns="$(arg namespace)">
+    <node name="frontier_server_node" pkg="uav_frontier_exploration_3d" type="frontier_server_node" output="screen">
+      <param name="rate" value="$(arg rate)"/>
+      <param name="exploration_config_filename" value="$(arg config_filename)"/>
+      <remap from="cloud_in" to="/$(arg cloud_in)"/>
+      <remap from="odometry" to="$(arg odometry)"/>
+      <remap from="point_reached" to="$(arg point_reached)"/>
+    </node>
+   </group>
+</launch>
