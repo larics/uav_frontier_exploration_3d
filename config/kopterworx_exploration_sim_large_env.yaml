@@ -1,6 +1,6 @@
 exploration:
-  global_frame: "/red/slam/map"
-  base_link_frame: "/red/slam/base_link"
+  global_frame: "/red/map/map"
+  base_link_frame: "/red/map/base_link"
   # Exploration depth of octomap tree. 16 is best resolution, slowest exploration
   # Save frontiers on that level
   # experience shows that there is significant increase in search time by 
@@ -47,7 +47,7 @@ octomap:
   octree_depth: 16
   # Filename and file path for saving octomap
   filename: "octomap_large.binvox.bt"
-  file_path: "catkin_ws/src/frontier_exploration_3d/data/"
+  file_path: $(find uav_frontier_exploration_3d)/data/"
 
 clustering:
   # A higher bandwidth will result in fewer but larger clusters

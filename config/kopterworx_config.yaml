@@ -1,0 +1,231 @@
+global_planner:
+  map_config_file: "uav_ws/src/uav_frontier_exploration_3d/config/kopterworx_config.yaml"
+  trajectory_config_file: "uav_ws/src/uav_frontier_exploration_3d/config/kopterworx_config.yaml"
+  path_planner_config_file: "uav_ws/src/uav_frontier_exploration_3d/config/kopterworx_config.yaml"
+  state_validity_checker_config_file: "uav_ws/src/uav_frontier_exploration_3d/config/kopterworx_config.yaml"
+  kinematics_config_file: "uav_ws/src/uav_frontier_exploration_3d/config/kopterworx_config.yaml"
+
+  # If planning for trajectory only, global planner will try to plan several
+  # times if previous attempts fail. In case all attempts fail, empty trajectory
+  # is returned
+  trajectory:
+    restarts: 1
+
+  # If planning for both path and trajectory, the global planner tries to plan
+  # several times to ensure obstacle free trajectory.
+  path_and_trajectory:
+    restarts: 1
+
+  path:
+    # Sometimes RRT* path planning fails and succeeds on next attempt. This
+    # will restart it several times in case of failure.
+    restarts: 1
+    # The path should be collision free, but in case it is not the planner restarts.
+    # This behavior can be switched off by setting false to collision_check flag.
+    collision_check_restarts: 5
+    collision_check: true
+  parabolic_airdrop:
+    # Parabola family parameters.
+    # d is dropoff distance projected onto xy plane
+    d: [1.5, 1.25, 1.75, 2.0]
+    # v is linear speed of the projectile in airdrop direction
+    v: [2.25, 1.75, 2.5, 3.0, 1.5, 1.25]
+    # alpha is angle at which the projectile is launched
+    alpha: [10, 20, 25, 15, 10, 5, 0]
+    # We search for all 360 degrees for the direction of parabola. This 
+    # parameter defines increment in degrees
+    yaw_increment: 90 #22.5
+    # Maximum difference in height between dropoff and final parabola point.
+    # Candidates with larger difference will be discarded.
+    max_dz: 50
+    # Parabola is planned for payload which is typically below the vehicle.
+    # That's why we have offset in z-axis while planning the trajectory for
+    # the uav.
+    payload_z_offset: 0.44
+
+    # Stopping trajectory constraints [x, y, z, yaw]
+    stopping_velocity: [4, 4, 4, 2]
+    stopping_acceleration: [0.8, 0.8, 0.8, 1.0]
+    use_horizontal_stopping_acceleration: true
+    horizontal_stopping_acceleration: 1.0
+    # Dropoff trajectory constraints [x, y, z, yaw]
+    # Sometimes dropoff spline gets stuck, look into that.
+    max_line_integral: 7.5
+    dropoff_velocity: [4, 4, 3, 2]
+    dropoff_acceleration: [0.8, 0.8, 0.6, 1.0]
+    use_horizontal_dropoff_acceleration: false
+    horizontal_dropoff_acceleration: 1.0
+    # Common for both trajectories is acceleration between dropoff and stopping
+    # trajectories. The idea is to have a positive z-direction acceleration so
+    # the uav does not interact with dropped object. [x, y, z, yaw]
+    intermediate_acceleration: [0, 0, 0, 0]
+    use_horizontal_intermediate_acceleration: false
+    horizontal_intermediate_acceleration: 0.5
+
+    spline_sampling_time: 0.01
+
+octomap:
+  path_to_file: "catkin_ws/src/larics_motion_planning/config/empty_map.binvox.bt"
+  # Search depth of octomap tree. 16 is best resolution, slowest search(although
+  # experience shows that there is no significant increase in search time by 
+  # setting this parameter to < 16)
+  search_depth: 16
+
+path_planner:
+  spaces:
+    # We are planning for UAV only, this means one space(x, y, z, yaw)
+    number: 1
+    # There are 4 dimensions we plan for.
+    dimensions: [4]
+    # Weights are important when using multiple spaces
+    weights: [1.0]
+    # Types of spaces that are used
+    types: ["RealVector"]
+    # Bounds are defined by
+    # bounds: [[[-15, 9], [-4, 45], [0.0, 10.0], [-3.15, 3.15]]] 
+    # bounds: [[[-22, 8], [-13, 29], [0.5, 4.0], [-3.15, 3.15]]]
+    bounds: [[[-65, 65], [-90, 90], [0.0, 5.5], [-3.15, 3.15]]]
+
+  # RRT* parameter set
+
+  # This sets longest segment that does not need to be checked for collisions.
+  # The trick is that this is actually a fraction of state space maximum
+  # extent. To transfer to metric we can divide our resolution with max extent
+  # to get the fraction that corresponds to resolution in meters. If you want 
+  # to use it as fraction of maximum space extent set is_metric: false
+  longest_valid_segment:
+    is_used: true
+    is_metric: true
+    value: 0.04
+  # Probability the planner will choose the goal state.
+  goal_bias:
+    is_used: true
+    value: 0.05
+  # Maximum length of a motion added in the tree of motions.
+  range:
+    is_used: true
+    value: 2.0
+  # Rewiring scale factor
+  rewire_factor:
+    is_used: false
+    value: 1.1
+  # Delays collision checking procedures. If set to false this checks
+  # collisions between neighbor nodes and tries to find the nearest. If set
+  # to true it stops when it has found the first collision free neighbor which
+  # in turn reduces computation time. Default was set to true.
+  delay_cc:
+    is_used: true
+    value: true
+  # Controls if the tree will be pruned or not. If set to true, pruning(
+  # removing a vertex) will occur only if the vertex and all its decendants
+  # satisfy the pruning condition. Default is false
+  tree_pruning: 
+    is_used: true
+    value: false
+  # Prune only if the new solution is X% better than the old solution. 0 will
+  # prune after every new solution, 1.0 will never prune. Default is 0.05.
+  prune_threshold:
+    is_used: true
+    value: 0.1
+  # Use the measure of the pruned subproblem instead of the measure of the
+  # entire problem domain(if it exists). Sounds like it's best to leave that
+  # on default value which is false.
+  pruned_measure:
+    is_used: true
+    value: false
+  # Use a k-nearest search for rewiring instead of a r-disc search. Default is
+  # true so we use k-nearest search.
+  k_nearest:
+    is_used: true
+    value: true
+  # Time we give to RRT* algorithm to solve the problem. Note that solution may
+  # be found even before time limit, in that case planner still searches for 
+  # optimal solution until time limit.
+  solve_time:
+    # In case is_incremental: true, "time" is the time limit for search. The 
+    # time for solution will be "increment" seconds and will be increased by
+    # increment until solution is found or it reaches "time" limit. 
+    # If is_incremental is set to false, "time" becomes time limit and only
+    # one search is conducted.
+    is_incremental: true
+    time: 5.0
+    increment: 0.5
+
+  # After path is found, OMPL can simplify it and smooth it out.
+  path_simplifier:
+    # Reducing vertices removes some waypoints from path.
+    reduce_vertices:
+      # Flag if we want to use it
+      is_used: true
+      # This is fractional, max_steps will be x*number_of_waypoints in path
+      # that RRT* algorithm provided. It can also be set to fixed value.
+      max_steps: 0.25
+      # Empty step happens when no vertices are removed. The simplifier stops
+      # when this happens n times.
+      max_empty_steps: 0
+      # This is maximum distance between two states that shortcutting is 
+      # attempted for. It is fraction of total path length.
+      range_ratio: 0.33
+      # If we set  this to false, max_steps and max_empty_steps must be integer
+      # that defines number of steps for shortcutting.
+      use_as_fraction: true
+
+    # Path can also be smoothed out
+    smooth_b_spline:
+      is_used: true
+      # How many times will the algorithm go thorugh whole path and smooth it
+      # out.
+      max_steps: 5
+
+toppra_trajectory:
+  # Maximum velocities for [x, y, z, yaw]
+  velocities: [0.8, 0.8, 0.5, 1]
+  # Maximum accelerations for [x, y, z, yaw]
+  accelerations: [0.5, 0.5, 0.8, 1]
+  # If using SO states angular must be set to 1
+  is_angular: [0, 0, 0, 1]
+  # Trajectory sampling frequency
+  sampling_frequency: 100.0
+
+state_validity_checker:
+  # State validity checker examples. Note that type can also be point.
+  type: "prism"
+
+  # If ball is selected a set of concentric spheres will be generated for
+  # state validity checking.
+  ball:
+    radius: 0.4
+    resolution: 0.1
+
+  # Just one sphere
+  sphere:
+    radius: 0.5
+    resolution: 0.05
+
+  # Circle can be useful for 2D exploration
+  circle:
+    radius: 0.5
+    resolution: 0.1
+
+  # Cylinder will be a set of circles
+  cylinder:
+    radius: 0.5
+    resolution: 0.1
+    height: 1.0
+
+  # Rectangle may also be useful for 2D robots
+  rectangle:
+    x_dimension: 0.6
+    y_dimension: 0.2
+    resolution: 0.02
+
+  # Prism will be a set of rectangles
+  prism:
+    # x_dimension: 2.0
+    # y_dimension: 2.0
+    # z_dimension: 1.0
+    # resolution: 0.25
+    x_dimension: 1.25
+    y_dimension: 1.25
+    z_dimension: 1.0
+    resolution: 0.25
