@@ -1,0 +1,12 @@
+<launch>
+  <arg name="rate" default="10" />
+  <arg name="namespace" default="$(env UAV_NAMESPACE)" />
+
+  <group ns="$(arg namespace)">
+    <node name="execute_trajectory" pkg="uav_frontier_exploration_3d" 
+      type="execute_trajectory_state_machine.py" output="screen" />
+      <param name="radius_trajectory_executed" value="0.7"/>
+      <param name="feedback_collection_time" value="1.0"/>
+      <param name="rate" value="$(arg rate)"/>
+  </group>
+</launch>
