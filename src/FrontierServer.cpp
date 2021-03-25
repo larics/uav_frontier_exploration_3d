@@ -80,8 +80,6 @@ namespace frontier_server
 		m_treeDepth = config["octomap"]["octree_depth"].as<unsigned>();
 
 		m_kernelBandwidth = config["clustering"]["kernel_bandwidth"].as<double>();
-		cout << "m_explorationDepth: " << m_explorationDepth << endl;
-		cout << "m_resolution: " << m_resolution << endl;
 		return true;
 	}
 
@@ -152,6 +150,7 @@ namespace frontier_server
 		// m_logfile << "updateGlobalFrontier" << endl;
 		ros::WallTime startTime = ros::WallTime::now();
 		int frontierSize {0};
+		m_globalFrontierCellsUpdated.clear();
 		for(KeySet::iterator iter = m_globalFrontierCells.begin(), end = m_globalFrontierCells.end();
 			iter!= end; ++iter)
 		{
@@ -176,6 +175,7 @@ namespace frontier_server
 			for (std::vector<point3d>::iterator neighbor_iter = changedCellNeighbor.begin();
 				neighbor_iter != changedCellNeighbor.end(); neighbor_iter++)
 			{
+
 				// Check for neighbors
 				OcTreeNode* node = m_octree->search(*neighbor_iter);
 				if(node == NULL)
@@ -187,16 +187,17 @@ namespace frontier_server
 			}
 			if(!unknownCellFlag || occupiedCellFlag)
 			{
-				m_globalFrontierCells.erase(*cell_iter);
+				// m_globalFrontierCells.erase(*cell_iter);
 				deleted++;	
 			}
-			else 
-				cell_iter++;				
+			else m_globalFrontierCellsUpdated.insert(*cell_iter);
+			
+			cell_iter++;				
 		}
 		m_logfile << "Number of deleted frontiers:" << deleted << endl;
 		// Calculate number of frontiers
 		frontierSize = 0;
-		for(KeySet::iterator iter = m_globalFrontierCells.begin(), end = m_globalFrontierCells.end();
+		for(KeySet::iterator iter = m_globalFrontierCellsUpdated.begin(), end = m_globalFrontierCellsUpdated.end();
 			iter!= end; ++iter)
 		{
 			frontierSize++;
@@ -212,7 +213,7 @@ namespace frontier_server
     // m_logfile << "searchForParents" << endl;
 		ros::WallTime startTime = ros::WallTime::now();
 		// Search in globalFrontierCells after update
-    for(KeySet::iterator iter = m_globalFrontierCells.begin(), end = m_globalFrontierCells.end(); iter != end; ++iter)
+    for(KeySet::iterator iter = m_globalFrontierCellsUpdated.begin(), end = m_globalFrontierCellsUpdated.end(); iter != end; ++iter)
     {
       // Search for parent on the desire depth 
       OcTreeNode* parentNodePtr = m_octree->search(*iter, m_explorationDepth);
@@ -294,20 +295,21 @@ namespace frontier_server
 	void FrontierServer::checkClusteredCells()
 	{
 		int deletedNum {0};
+		m_clusteredCellsUpdated.clear();
 		for(KeySet::iterator iter = m_clusteredCells.begin(), 
 			end = m_clusteredCells.end(); iter != end; ++iter)
 		{
 			// Get cell position
-			point3d tempCellPosition = m_octree->keyToCoord(*iter);
-			double x = tempCellPosition.x();
-			double y = tempCellPosition.y();
-			double z = tempCellPosition.z();
-		
+			point3d tempCellPosition = m_octree->keyToCoord(*iter);		
 			if (isPointAlreadyAssigned(tempCellPosition))
 			{
 				// Remove it from candidates
-				m_clusteredCells.erase(*iter);
+				// m_clusteredCells.erase(*iter);
 				deletedNum++;
+			}
+			else 
+			{
+				m_clusteredCellsUpdated.insert(*iter);
 			}
 		}
 		cout << "Delete candidates num: " << deletedNum << endl;
@@ -442,7 +444,6 @@ namespace frontier_server
 						setStateAndPublish(ExplorationState::CHECKFORFRONTIERS);
 					// If the previous goal is reached
 					else if (m_currentGoalReached)
-					// else if (true)
 						setStateAndPublish(ExplorationState::POINTREACHED);
 					else 
 						setStateAndPublish(ExplorationState::CHECKFORFRONTIERS);
@@ -451,13 +452,16 @@ namespace frontier_server
 				case ExplorationState::POINTREACHED:
 					// Find Best Frontier
 					m_currentGoalReached = false;
-									
+					// Delete candidates that are too close to prevoius assigned points
+					
 					clusterFrontierAndPublish();
 					point3d currentPoint3d(m_uavCurrentPose.position.x, 
 						m_uavCurrentPose.position.y, m_uavCurrentPose.position.z);
-
+					// Simulation bag
 					m_bestFrontierPoint = 
-							m_bestFrontierServer.bestFrontierInfGain(m_octree, currentPoint3d, m_clusteredCells);
+							m_bestFrontierServer.bestFrontierInfGain(m_octree, currentPoint3d, m_clusteredCellsUpdated);
+					// m_bestFrontierPoint = 
+					// 	m_bestFrontierServer.closestFrontier(m_octree, currentPoint3d, m_clusteredCellsUpdated);
 					m_logfile << "Best frontier: " << m_bestFrontierPoint << endl;
 					
 					m_allUAVGoals.push_back(m_bestFrontierPoint);
@@ -557,7 +561,7 @@ namespace frontier_server
 		for (OcTree::iterator it = m_octree->begin(m_explorationDepth), end = m_octree->end(); it != end; ++it)
 		{
 			bool isfron = false;
-			for(KeySet::iterator iter = m_clusteredCells.begin(), end = m_clusteredCells.end(); iter!= end; ++iter)
+			for(KeySet::iterator iter = m_clusteredCellsUpdated.begin(), end = m_clusteredCellsUpdated.end(); iter!= end; ++iter)
 			{
 				octomap::point3d fpoint;
 				fpoint = m_octree->keyToCoord(*iter);

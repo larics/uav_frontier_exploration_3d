@@ -97,7 +97,8 @@ namespace frontier_server
       string m_configFilename;
       
       // The newest frontier cells
-      KeySet m_globalFrontierCells, m_clusteredCells, m_parentFrontierCells,
+      KeySet m_globalFrontierCells, m_globalFrontierCellsUpdated, 
+        m_clusteredCells, m_clusteredCellsUpdated, m_parentFrontierCells,
         m_invalidParentCells;
   
       ofstream m_logfile;
@@ -108,7 +109,7 @@ namespace frontier_server
       vector<point3d> m_allUAVGoals;
 
       geometry_msgs::Pose m_uavCurrentPose;
-      geometry_msgs::PoseStamped m_uavCurrentReference; 
+      geometry_msgs::PoseStamped m_uavCurrentReference;
       ros::ServiceServer m_serviceExploration;  
       ExplorationState m_currentState = ExplorationState::OFF;
     };
