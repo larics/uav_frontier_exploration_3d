@@ -5,11 +5,9 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /Axes2
         - /MarkerArray5/Namespaces1
       Splitter Ratio: 0.7191011309623718
-    Tree Height: 630
+    Tree Height: 953
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -28,7 +26,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: PointCloud2
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -60,58 +58,25 @@ Visualization Manager:
       High Resolution: true
       Low Resolution: false
       Name: Submaps
-      Submap query service: /slam/submap_query
+      Submap query service: /map/submap_query
       Submaps:
         All: true
         All Submap Pose Markers: true
         Trajectory 0:
           0.100: true
           1.100: true
-          10.100: true
-          11.100: true
-          12.100: true
-          13.100: true
-          14.100: true
-          15.100: true
-          16.100: true
-          17.100: true
-          18.100: true
-          19.100: true
           2.100: true
-          20.100: true
-          21.100: true
-          22.100: true
-          23.100: true
-          24.100: true
-          25.100: true
-          26.100: true
-          27.100: true
-          28.100: true
-          29.100: true
           3.100: true
-          30.100: true
-          31.100: true
-          32.100: true
-          33.100: true
-          34.100: true
-          35.100: true
-          36.100: true
-          37.100: true
-          38.100: true
-          39.100: true
           4.100: true
-          40.100: true
-          41.53: true
-          42.3: true
           5.100: true
           6.100: true
           7.100: true
-          8.100: true
-          9.100: true
+          8.85: true
+          9.35: true
           Submap Pose Markers: true
           Value: true
-      Topic: /slam/submap_list
-      Tracking frame: red/slam/base_link
+      Topic: /red/submap_list
+      Tracking frame: red/map/base_link
       Unreliable: false
       Value: true
     - Class: rviz/Axes
@@ -119,14 +84,14 @@ Visualization Manager:
       Length: 0.5
       Name: Axes
       Radius: 0.10000000149011612
-      Reference Frame: red/slam/map
+      Reference Frame: red/map/map
       Value: true
     - Class: rviz/Axes
       Enabled: true
-      Length: 2.5
+      Length: 2
       Name: Axes
       Radius: 0.30000001192092896
-      Reference Frame: red/slam/base_link
+      Reference Frame: red/map/base_link
       Value: true
     - Class: rviz/MarkerArray
       Enabled: false
@@ -154,7 +119,7 @@ Visualization Manager:
       Value: false
     - Class: rviz/MarkerArray
       Enabled: true
-      Marker Topic: /red/clustered_frontier_cells_vis_array
+      Marker Topic: /occupied_cells_vis_array
       Name: MarkerArray
       Namespaces:
         {}
@@ -192,12 +157,12 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 1
       Min Color: 0; 0; 0
-      Min Intensity: 0.5123447179794312
+      Min Intensity: 0.7037873268127441
       Name: PointCloud2
       Position Transformer: XYZ
       Queue Size: 10
@@ -209,7 +174,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: false
+      Value: true
     - Alpha: 1
       Buffer Length: 1
       Class: rviz/Path
@@ -237,15 +202,15 @@ Visualization Manager:
       Class: rviz/Map
       Color Scheme: costmap
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Map
-      Topic: /slam/map
+      Topic: /red/map
       Unreliable: false
       Use Timestamp: false
-      Value: false
+      Value: true
     - Class: rviz/MarkerArray
       Enabled: true
-      Marker Topic: /slam/trajectory_node_list
+      Marker Topic: /red/trajectory_node_list
       Name: MarkerArray
       Namespaces:
         Trajectory 0: true
@@ -255,7 +220,7 @@ Visualization Manager:
   Global Options:
     Background Color: 255; 255; 255
     Default Light: true
-    Fixed Frame: red/slam/map
+    Fixed Frame: red/map/map
     Frame Rate: 30
   Name: root
   Tools:
@@ -271,7 +236,7 @@ Visualization Manager:
       X std deviation: 0.5
       Y std deviation: 0.5
     - Class: rviz/SetGoal
-      Topic: /robot_2/move_base_simple/goal
+      Topic: ""
     - Class: rviz/PublishPoint
       Single click: true
       Topic: /clicked_point
@@ -279,41 +244,41 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 141.89651489257812
+      Distance: 48.154388427734375
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 7.836366653442383
-        Y: -26.06766700744629
-        Z: -3.6296332837082446e-5
+        X: 3.555893898010254
+        Y: -11.051968574523926
+        Z: -5.9184516430832446e-5
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.9847965240478516
+      Pitch: 0.8597970008850098
       Target Frame: <Fixed Frame>
       Value: XYOrbit (rviz)
-      Yaw: 3.9741923809051514
+      Yaw: 4.649200439453125
     Saved: ~
 Window Geometry:
   Displays:
-    collapsed: true
-  Height: 1025
-  Hide Left Dock: true
+    collapsed: false
+  Height: 1172
+  Hide Left Dock: false
   Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd00000004000000000000015600000363fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073000000003d000002b3000000c900fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007300000002f6000000aa0000005c00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f0000037efc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d0000037e000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073d0000003efc0100000002fb0000000800540069006d006501000000000000073d000002eb00fffffffb0000000800540069006d006501000000000000045000000000000000000000073d0000036300000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000156000003f6fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d000003f6000000c900fffffffb0000001e0054006f006f006c002000500072006f0070006500720074006900650073000000036d000000c60000005c00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f0000037efc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d0000037e000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007800000003efc0100000002fb0000000800540069006d0065010000000000000780000002eb00fffffffb0000000800540069006d0065010000000000000450000000000000000000000624000003f600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
     collapsed: false
   Tool Properties:
-    collapsed: true
+    collapsed: false
   Views:
     collapsed: true
-  Width: 1853
-  X: 67
-  Y: 27
+  Width: 1920
+  X: 1920
+  Y: 0
