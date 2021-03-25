@@ -1,0 +1,38 @@
+name: exploration
+root: ./
+startup_window: roscore
+pre_window: export UAV_NAMESPACE=red
+windows:
+  - roscore:
+      layout: tiled
+      panes:
+        - roscore
+        - export SITL_RITW_TERMINAL="tmux new-window -n:ardupilot1"; waitForRos; roslaunch ardupilot_gazebo sim_vehicle.launch enable_console:=false streamrate:=15
+        - waitForRos; rosparam set use_sim_time true; roslaunch ardupilot_gazebo mavros.launch config_file:=custom_config/apm_config.yaml
+  - gazebo:
+      layout: tiled
+      panes:
+        - waitForRos; roslaunch ardupilot_gazebo kopterworx.launch use_sim_time:=true  enable_velodyne:=true max_range:=20 world:=$(rospack find uav_frontier_exploration_3d)/worlds/house.world tf_prefix:="$UAV_NAMESPACE/map" x:=-11 y:=-7
+  - arm&takeof:
+      layout: tiled
+      panes:
+        - waitForRos; waitForOdometry; roslaunch uav_ros_control pid_carrot_carto.launch manual_takeoff:=false odometry:=/$UAV_NAMESPACE/uav/cartographer/odometry_filtered_acc
+        - waitForRos; waitForSLAM; rosrun ardupilot_gazebo automatic_takeoff.sh
+  - slam:
+      layout: tiled
+      panes: 
+        - waitForRos; waitForOdometry; rosparam set use_sim_time true; roslaunch uav_ros_general cartographer.launch simulation:=true configuration_directory:=$(pwd)/custom_config configuration_basename:=exploration.lua
+        - waitForRos; waitForOdometry; roslaunch uav_ros_general velocity_estimation_acc.launch
+  - exploration:
+      layout: tiled
+      panes:
+        - waitForRos; waitForOdometry; waitForSLAM; roslaunch uav_frontier_exploration_3d planner.launch
+        - waitForRos; waitForOdometry; waitForSLAM; roslaunch uav_frontier_exploration_3d execute_trajectory.launch
+        - waitForRos; waitForOdometry; waitForSLAM; roslaunch uav_frontier_exploration_3d frontier_server.launch odometry:=/$UAV_NAMESPACE/uav/cartographer/odometry_filtered_acc config_filename:=$(rospack find uav_frontier_exploration_3d)/config/kopterworx_exploration_sim_house.yaml
+        - "#waitForRos; waitForOdometry; waitForSLAM; rosservice call /$UAV_NAMESPACE/exploration/toggle \"data: true\""
+        - "#rosservice call /$UAV_NAMESPACE/confirm_trajectory \"data: true\""
+  - rviz:
+      layout: tiled
+      panes:
+        - waitForRos; waitForOdometry; waitForSLAM; rosrun rviz rviz -d ~/uav_ws/src/uav_frontier_exploration_3d/rviz/cartographer_and_frontier.rviz
+        - "#rosservice call /$UAV_NAMESPACE/exploration/save_octomap \"{}\""
