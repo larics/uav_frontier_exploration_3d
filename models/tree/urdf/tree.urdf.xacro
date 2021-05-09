@@ -20,14 +20,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://frontier_exploration_3d/models/tree/meshes/tree_25k_mesh.dae" scale="0.4 0.4 0.6" />
+          <mesh filename="package://uav_frontier_exploration_3d/models/tree/meshes/tree_25k_mesh.dae" scale="0.4 0.4 0.6" />
         </geometry>
       </visual>
 
       <collision name='collision'>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://frontier_exploration_3d/models/tree/meshes/tree_25k_mesh.dae" scale="0.4 0.4 0.6" />
+          <mesh filename="package://uav_frontier_exploration_3d/models/tree/meshes/tree_25k_mesh.dae" scale="0.4 0.4 0.6" />
         </geometry>
       </collision>
     </link>

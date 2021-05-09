@@ -20,7 +20,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 -1.57" />
         <geometry>
-          <mesh filename="package://frontier_exploration_3d/models/tower/meshes/mbzirc_Tower.dae"
+          <mesh filename="package://uav_frontier_exploration_3d/models/tower/meshes/mbzirc_Tower.dae"
             scale="1 1 1" />
         </geometry>
       </visual>
@@ -28,7 +28,7 @@
       <collision name='collision'>
         <origin xyz="0 0 0" rpy="0 0 -1.57"/>
         <geometry>
-          <mesh filename="package://frontier_exploration_3d/models/tower/meshes/mbzirc_Tower.dae"
+          <mesh filename="package://uav_frontier_exploration_3d/models/tower/meshes/mbzirc_Tower.dae"
             scale="1 1 1" />
         </geometry>
       </collision>

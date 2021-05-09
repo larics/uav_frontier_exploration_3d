@@ -19,7 +19,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-           <mesh filename="package://frontier_exploration_3d/models/container/meshes/container_mesh_1000.dae"
+           <mesh filename="package://uav_frontier_exploration_3d/models/container/meshes/container_mesh_1000.dae"
             scale="5 5 4" />
         </geometry>
       </visual>
@@ -27,7 +27,7 @@
       <collision name='collision'>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-           <mesh filename="package://frontier_exploration_3d/models/container/meshes/container_mesh_1000.dae"
+           <mesh filename="package://uav_frontier_exploration_3d/models/container/meshes/container_mesh_1000.dae"
             scale="5 5 4" />
         </geometry>
       </collision>
