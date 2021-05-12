@@ -44,9 +44,9 @@ namespace frontier_server
       void run();
 
     protected:
-      void findFrontier(PCLPointCloudI& changedCells);
+      KeySet findFrontier(PCLPointCloudI& changedCells);
       void searchForParentsAndPublish();
-      void updateGlobalFrontier();
+      void updateGlobalFrontier(KeySet& globalFrontierCell);
       void clusterFrontierAndPublish();
       void pointReachedCallback(std_msgs::Bool msg);
       void currentReferenceCallback(geometry_msgs::PoseStamped msg);
@@ -97,7 +97,7 @@ namespace frontier_server
       string m_configFilename;
       
       // The newest frontier cells
-      KeySet m_globalFrontierCells, m_globalFrontierCellsUpdated, 
+      KeySet m_globalFrontierCellsUpdated, 
         m_clusteredCells, m_clusteredCellsUpdated, m_parentFrontierCells,
         m_invalidParentCells;
   

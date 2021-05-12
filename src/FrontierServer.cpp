@@ -83,9 +83,10 @@ namespace frontier_server
 		return true;
 	}
 
-	void FrontierServer::findFrontier(PCLPointCloudI& changedCells)
+	KeySet FrontierServer::findFrontier(PCLPointCloudI& changedCells)
 	{
 		ros::WallTime startTime = ros::WallTime::now();
+		KeySet globalFrontierCells;
 		// m_logfile << "findFrontier" << endl;
 		bool unknownCellFlag {false};
 		bool freeCellFlag {false};
@@ -112,7 +113,7 @@ namespace frontier_server
 			{
 				OCTOMAP_ERROR_STR("Error in search: [" 
 					<< changedCellPoint << "] is out of OcTree bounds!");
-				return;
+				return globalFrontierCells;
 			}
 			
 			// Check point state: free/occupied
@@ -134,24 +135,24 @@ namespace frontier_server
 						freeCellFlag = true;
 				}
 				if(unknownCellFlag && freeCellFlag)
-					m_globalFrontierCells.insert(changedCellKey);
+					globalFrontierCells.insert(changedCellKey);
 					frontierSize++;
 			}
 		}
 	
-		// cout << "FrontierServer - frontiers: " << frontierSize << endl;
 		m_logfile << "Number of frontiers:" << frontierSize << endl;
 		double total_time = (ros::WallTime::now() - startTime).toSec();
 		m_logfile << "findFrontier - used total: "<< total_time << " sec" <<endl;
+		return globalFrontierCells;
 	}
 
-	void FrontierServer::updateGlobalFrontier()
+	void FrontierServer::updateGlobalFrontier(KeySet& globalFrontierCells)
 	{
 		// m_logfile << "updateGlobalFrontier" << endl;
 		ros::WallTime startTime = ros::WallTime::now();
 		int frontierSize {0};
 		m_globalFrontierCellsUpdated.clear();
-		for(KeySet::iterator iter = m_globalFrontierCells.begin(), end = m_globalFrontierCells.end();
+		for(KeySet::iterator iter = globalFrontierCells.begin(), end = globalFrontierCells.end();
 			iter!= end; ++iter)
 		{
 			frontierSize++;
@@ -164,7 +165,7 @@ namespace frontier_server
 		// Find in globalFrontier cells that are not frontier anymore --vol2
 		// Delete them from globalFrontierCells
 		std::vector<octomap::point3d> changedCellNeighbor;
-		for(KeySet::iterator cell_iter = m_globalFrontierCells.begin(), end = m_globalFrontierCells.end();
+		for(KeySet::iterator cell_iter = globalFrontierCells.begin(), end = globalFrontierCells.end();
 			cell_iter!= end; )
 		{
 			// If current cell if free, check its neighbors
@@ -187,7 +188,7 @@ namespace frontier_server
 			}
 			if(!unknownCellFlag || occupiedCellFlag)
 			{
-				// m_globalFrontierCells.erase(*cell_iter);
+				// globalFrontierCells.erase(*cell_iter);
 				deleted++;	
 			}
 			else m_globalFrontierCellsUpdated.insert(*cell_iter);
@@ -409,7 +410,8 @@ namespace frontier_server
 		{
 			ros::WallTime startTime = ros::WallTime::now();
 			ros::spinOnce();
-
+			// Initialize before switch
+			KeySet globalFrontierCells;
 			switch (m_currentState)
 			{
 				case ExplorationState::OFF:
@@ -434,9 +436,9 @@ namespace frontier_server
 					break;
 
 				case ExplorationState::ON:
-					findFrontier(m_changedCells);
+					globalFrontierCells = findFrontier(m_changedCells);
 					// Delete frontiers that are explored now
-					updateGlobalFrontier();	
+					updateGlobalFrontier(globalFrontierCells);	
 					// Find frontiers on the upper level (m_explorationDepth) and publish it
 					searchForParentsAndPublish();
 					// If there is no parents switch to CHECKFORFRONTIERS
