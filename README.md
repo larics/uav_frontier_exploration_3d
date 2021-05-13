@@ -2,6 +2,25 @@
 
 # A Multi-Resolution Frontier-Based Planner for Autonomous 3D Exploration
 
+This repository contains the code for frontier-based exploration, presented in the papers:
+
+**A Multi-Resolution Frontier-Based Planner for Autonomous 3D Exploration**\
+Ana Batinovic, Tamara Petrovic, Antun Ivanovic, Frano Petric and Stjepan Bogdan (IEEE Robotics and Automation Letters 2021)\
+If you use this code in a scholarly work, please cite our [journal paper](https://ieeexplore.ieee.org/document/9387089):
+
+```
+@ARTICLE{Batinovic-RAL-2021,
+  author={Batinovic, Ana and Petrovic, Tamara and Ivanovic, Antun and Petric, Frano and Bogdan, Stjepan},
+  journal={IEEE Robotics and Automation Letters}, 
+  title={A Multi-Resolution Frontier-Based Planner for Autonomous 3D Exploration}, 
+  year={2021},
+  volume={6},
+  number={3},
+  pages={4528-4535},
+  doi={10.1109/LRA.2021.3068923}}
+```
+
+
 Proposed multi-resolution frontier-based planner is a real-time capable exploration planner.
 The planner consists of the algorithm for detecting frontier points, followed by clustering of frontier points and selecting the best
 frontier point to be explored. Performance is achieved by not relying on data obtained directly 
