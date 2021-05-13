@@ -2,7 +2,7 @@
 
 # A Multi-Resolution Frontier-Based Planner for Autonomous 3D Exploration
 
-This repository contains the code for frontier-based exploration, presented in the papers:
+This repository contains the code for frontier-based exploration, presented in the paper:
 
 **A Multi-Resolution Frontier-Based Planner for Autonomous 3D Exploration**\
 Ana Batinovic, Tamara Petrovic, Antun Ivanovic, Frano Petric and Stjepan Bogdan (IEEE Robotics and Automation Letters 2021)\
