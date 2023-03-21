@@ -58,7 +58,7 @@ global_position:
 
 # imu_pub
 imu:
-  frame_id: "red/map/base_link"
+  frame_id: "red/base_link"
   # need find actual values
   linear_acceleration_stdev: 0.0003
   angular_velocity_stdev: 0.0003490659

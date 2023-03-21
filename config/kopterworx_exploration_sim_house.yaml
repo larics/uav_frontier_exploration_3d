@@ -1,12 +1,12 @@
 exploration:
   # simulation
-  global_frame: "/red/map/map"
-  base_link_frame: "/red/map/base_link"
+  global_frame: "world"
+  base_link_frame: "/red/base_link"
   # Exploration depth of octomap tree. 16 is best resolution, slowest exploration
   # Save frontiers on that level
   # experience shows that there is significant increase in search time by 
   # setting this parameter to < 16)
-  depth: 14
+  depth: 15
   # if the candidate point is inside the radius of the previous visited points,
   # the candidate is deleted from the candidate list
   radius: 2.5
