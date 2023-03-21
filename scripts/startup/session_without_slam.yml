@@ -29,5 +29,5 @@ windows:
   - rviz:
       layout: tiled
       panes:
-        - waitForRos; waitForOdometry; rosrun rviz rviz -d ~/uav_ws/src/uav_frontier_exploration_3d/rviz/cartographer_and_frontier.rviz
+        - waitForRos; waitForOdometry; rosrun rviz rviz -d ~/uav_ws/src/uav_frontier_exploration_3d/rviz/frontier.rviz
         - "#rosservice call /$UAV_NAMESPACE/exploration/save_octomap \"{}\""
