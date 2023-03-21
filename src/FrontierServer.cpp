@@ -16,13 +16,9 @@ namespace frontier_server
 
 		// Read from yaml file
 		private_nh.param("exploration_config_filename", m_configFilename, m_configFilename);
-		string username = "/home/";
-		username = username + getenv("USER") + "";
-		size_t found = m_configFilename.find(username);
-		if (found != string::npos) configureFromFile(m_configFilename);
-		else configureFromFile(username + m_configFilename);
+		configureFromFile(m_configFilename);
 
-		m_logfile.open(username + "/log_frontier.txt");
+		m_logfile.open("/log_frontier.txt");
 		m_logfile << "This is a log file for 3D-Frontier" << endl;
 
 		// Initialize publishers

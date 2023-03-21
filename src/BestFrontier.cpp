@@ -13,16 +13,12 @@ namespace best_frontier
 	{
 		ros::NodeHandle private_nh {ros::NodeHandle("~")};
 		
-		string username = "/home/";
-		username = username + getenv("USER") + "";
-		m_logfile.open(username + "/log_best_frontier.txt");
+		m_logfile.open("/log_best_frontier.txt");
 		m_logfile << "This is a log file for BestFrontier" << endl;
 
 		// Read from yaml file
 		private_nh.param("exploration_config_filename", m_configFilename, m_configFilename);
-		size_t found = m_configFilename.find(username);
-		if (found != string::npos) configureFromFile(m_configFilename);
-		else configureFromFile(username + m_configFilename);
+		configureFromFile(m_configFilename);
 	}
 
 	bool BestFrontier::configureFromFile(string config_filename)
