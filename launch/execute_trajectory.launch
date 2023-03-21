@@ -1,6 +1,7 @@
 <launch>
   <arg name="rate" default="10" />
   <arg name="namespace" default="$(env UAV_NAMESPACE)" />
+  <arg name="odometry" default="odometry"/>
 
   <group ns="$(arg namespace)">
     <node name="execute_trajectory" pkg="uav_frontier_exploration_3d" 
@@ -8,5 +9,6 @@
       <param name="radius_trajectory_executed" value="0.7"/>
       <param name="feedback_collection_time" value="1.0"/>
       <param name="rate" value="$(arg rate)"/>
+      <remap from="odometry" to="$(arg odometry)"/>
   </group>
 </launch>

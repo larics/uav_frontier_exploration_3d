@@ -69,7 +69,7 @@ class UavExplorationSm:
       self.targetPointCallback, queue_size=1)
     rospy.Subscriber('carrot/trajectory', MultiDOFJointTrajectoryPoint,
       self.referenceCallback, queue_size=1)
-    rospy.Subscriber('uav/cartographer/odometry_filtered_acc', Odometry, 
+    rospy.Subscriber('odometry', Odometry, 
       self.globalPositionCallback, queue_size=1)
     rospy.Subscriber('executing_trajectory', Int32, 
       self.executingTrajectoryCallback, queue_size=1)
