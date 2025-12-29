@@ -1,0 +1,33 @@
+name: exploration
+root: ./
+startup_window: roscore
+pre_window: export UAV_NAMESPACE=red
+windows:
+  - roscore:
+      layout: tiled
+      panes:
+        - roscore
+        - export SITL_RITW_TERMINAL="tmux new-window -n:ardupilot1"; waitForRos; roslaunch ardupilot_gazebo sim_vehicle.launch enable_console:=false
+        - waitForRos; rosparam set use_sim_time true; roslaunch ardupilot_gazebo mavros.launch
+  - gazebo:
+      layout: tiled
+      panes:
+        - waitForRos; roslaunch ardupilot_gazebo kopterworx.launch use_sim_time:=true  enable_velodyne:=true max_range:=20 world:=$(rospack find uav_frontier_exploration_3d)/worlds/house.world tf_prefix:="$UAV_NAMESPACE/map" x:=-11 y:=-7
+  - arm&takeof:
+      layout: tiled
+      panes:
+        - waitForRos; waitForOdometry; roslaunch uav_ros_control pid_carrot.launch manual_takeoff:=false odometry:=odometry msf_callback_enable:=true
+        - waitForRos; waitForOdometry; rosrun ardupilot_gazebo automatic_takeoff.sh
+  - exploration:
+      layout: tiled
+      panes:
+        - waitForRos; waitForOdometry; export USER="../root"; roslaunch uav_frontier_exploration_3d planner.launch
+        - waitForRos; waitForOdometry; roslaunch uav_frontier_exploration_3d execute_trajectory.launch
+        - waitForRos; waitForOdometry; roslaunch uav_frontier_exploration_3d frontier_server.launch odometry:=/$UAV_NAMESPACE/mavros/global_position/local config_filename:=$(rospack find uav_frontier_exploration_3d)/config/kopterworx_exploration_sim_house.yaml
+        - "#waitForRos; waitForOdometry; rosservice call /$UAV_NAMESPACE/exploration/toggle \"data: true\""
+        - "#rosservice call /$UAV_NAMESPACE/confirm_trajectory \"data: true\""
+  - rviz:
+      layout: tiled
+      panes:
+        - waitForRos; waitForOdometry; rosrun rviz rviz -d ~/uav_ws/src/uav_frontier_exploration_3d/rviz/frontier.rviz
+        - "#rosservice call /$UAV_NAMESPACE/exploration/save_octomap \"{}\""

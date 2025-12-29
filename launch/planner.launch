@@ -8,7 +8,7 @@
 
     <node name="global_planner" pkg="larics_motion_planning" type="global_planner_node" output="screen">
       <param name="rate" value="$(arg rate)" />
-      <param name="global_planner_config_file" value="$(find uav_frontier_exploration_3d)/config/kopterworx_config.yaml" />
+      <param name="global_planner_config_file" value="uav_ws/src/uav_frontier_exploration_3d/config/kopterworx_config.yaml" />
       <remap from="/octomap_binary" to="octomap_binary"/>
     </node>
 

@@ -1,6 +1,6 @@
 exploration:
-  global_frame: "/red/map/map"
-  base_link_frame: "/red/map/base_link"
+  global_frame: "world"
+  base_link_frame: "red/base_link"
   # Exploration depth of octomap tree. 16 is best resolution, slowest exploration
   # Save frontiers on that level
   # experience shows that there is significant increase in search time by 

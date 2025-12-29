@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 # Absolute path to this script. /home/user/bin/foo.sh
 SCRIPT=$(readlink -f $0)
@@ -10,7 +10,7 @@ cd "$SCRIPTPATH"
 rm .tmuxinator.yml
 
 # link the session file to .tmuxinator.yml
-ln session.yml .tmuxinator.yml
+ln session_without_slam.yml .tmuxinator.yml
 
 # start tmuxinator
 tmuxinator
